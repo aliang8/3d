@@ -115,13 +115,14 @@ def parse_file( fname, edges, transform, screen, color ):
             edges = edges[0:0]
             
         elif line == 'box':
-            x = float(args[0])
-            y = float(args[1])
-            z = float(args[2])
-            width = float(args[3])
-            height = float(args[4])
-            depth = float(args[5])
-            add_box(x,y,z,width,depth,height)
+            
+            add_edge(edges, x + width, y, z - depth, x + width, y, z - depth)
+            add_edge(edges, x + width + 1, y, z - depth, x + width + 1, y, z - depth)
+            add_edge(edges, x, y - height, z - depth, x, y - height, z - depth)
+            add_edge(edges, x + 1, y - height, z - depth, x + 1, y - height, z - depth)
+            
+            
+            
             
         elif line == 'display' or line == 'save':
             clear_screen(screen)
