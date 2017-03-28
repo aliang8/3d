@@ -112,17 +112,17 @@ def parse_file( fname, edges, transform, screen, color ):
             matrix_mult( transform, edges )
 
         elif line == 'clear':
-            edges = edges[0:0]
+            edges = []
             
         elif line == 'box':
-            x = float(args[0])
-            y = float(args[1])
-            z = float(args[2])
-            width = float(args[3])
-            height = float(args[4])
-            depth = float(args[5])
-            add_box(x,y,z,width,depth,height)
-            
+            add_box(edges,float(args[0]),float(args[1]),float(args[2]),float(args[3]),float(args[4]),float(args[5]))
+
+        elif line == 'sphere':
+            add_sphere(edges,float(args[0]),float(args[1]),float(args[2]),float(args[3]),.01)
+
+        elif line == 'torus':
+            add_torus(edges,float(args[0]),float(args[1]),float(args[2]),float(args[3]),float(args[4]),.01)
+                        
         elif line == 'display' or line == 'save':
             clear_screen(screen)
             draw_lines(edges, screen, color)

@@ -3,32 +3,62 @@ from matrix import *
 from math import *
 
 def add_box( points, x, y, z, width, height, depth ):
+    x2 = x + width
+    y2 = y - height
+    z2 = z - depth
     add_edge(points, x, y, z, x, y, z)
     add_edge(points, x + 1, y, z, x + 1, y, z)
-    add_edge(points, x, y - height, z, x, y - height, z)
-    add_edge(points, x + 1, y - height, z, x + 1, y - height, z)
-    add_edge(points, x, y, z - depth, x, y, z - depth)
-    add_edge(points, x + 1, y, z - depth, x + 1, y, z - depth)
-    add_edge(points, x + width, y, z, x + width, y, z)
-    add_edge(points, x + width + 1, y, z, x + width + 1, y, z)
-    add_edge(points, x + width, y - height, z, x + width, y - height, z)
-    add_edge(points, x + width + 1, y - height, z, x + width + 1, y - height, z)
-    add_edge(points, x + width, y - height, z - depth, x + width, y - height, z - depth)
-    add_edge(points, x + width + 1, y - height, z - depth, x + width + 1, y - height, z - depth)
-    add_edge(points, x + width, y, z - depth, x + width, y, z - depth)
-    add_edge(points, x + width + 1, y, z - depth, x + width + 1, y, z - depth)
-    add_edge(points, x, y - height, z - depth, x, y - height, z - depth)
-    add_edge(points, x + 1, y - height, z - depth, x + 1, y - height, z - depth)
+    add_edge(points, x, y2, z, x, y2, z)
+    add_edge(points, x + 1, y2, z, x + 1, y2, z)
+    add_edge(points, x, y, z2, x, y, z2)
+    add_edge(points, x + 1, y, z2, x + 1, y, z2)
+    add_edge(points, x2, y, z, x2, y, z)
+    add_edge(points, x2 + 1, y, z, x2 + 1, y, z)
+    add_edge(points, x2, y2, z, x2, y2, z)
+    add_edge(points, x2 + 1, y2, z, x2 + 1, y2, z)
+    add_edge(points, x2, y2, z2, x2, y2, z2)
+    add_edge(points, x2 + 1, y2, z2, x2 + 1, y2, z2)
+    add_edge(points, x2, y, z2, x2, y, z2)
+    add_edge(points, x2 + 1, y, z2, x2 + 1, y, z2)
+    add_edge(points, x, y2, z2, x, y2, z2)
+    add_edge(points, x + 1, y2, z2, x + 1, y2, z2)
 
-def add_sphere( points, cx, cy, cz, r, step ):
-    pass
+def add_sphere( edges, cx, cy, cz, r, step ):
+    points = generate_sphere([],cx,cy,cz,r,step)
+    for point in points:
+        add_edge(edges,point[0],point[1],point[2],point[0]+1,point[1]+1,point[2]+1)
+        
 def generate_sphere( points, cx, cy, cz, r, step ):
-    pass
-
-def add_torus( points, cx, cy, cz, r0, r1, step ):
-    pass
+    pi = math.pi
+    n = int(1.0 / step)
+    for i in range(n):
+        rot = i / float(n)
+        for j in range(n):
+            circ = j / float(n)
+            x = r * math.cos(circ * pi) + cx
+            y = r * math.sin(circ * pi) * math.cos(rot * 2 * pi) + cy
+            z = r * math.sin(circ * pi) * math.sin(rot * 2 * pi) + cz
+            points.append([x,y,z])
+    return points
+    
+def add_torus( edges, cx, cy, cz, r0, r1, step ):
+    points = generate_torus([],cx,cy,cz,r0,r1,step)
+    for point in points:
+        add_edge(edges,point[0],point[1],point[2],point[0],point[1],point[2])
+        add_edge(edges,point[0] + 1,point[1],point[2],point[0] + 1,point[1],point[2])
+        
 def generate_torus( points, cx, cy, cz, r0, r1, step ):
-    pass
+    pi = math.pi
+    n = int(1.0 / step)
+    for i in range(n):
+        rot = i / float(n)
+        for j in range(n):
+            circ = j / float(n)
+            x = math.cos(rot * 2 * pi) * (r0 * math.cos(circ * 2 * pi) + r1) + cx;
+            y = r0 * math.sin(circ * 2 * pi) + cy;
+            z = -math.sin(rot * 2 * pi) * (r0 * math.cos(circ * 2 * pi) + r1) + cz;
+            points.append([x,y,z])
+    return points
 
 def add_circle( points, cx, cy, cz, r, step ):
     x0 = r + cx
